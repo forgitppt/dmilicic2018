@@ -20,7 +20,8 @@ import com.alex.readabc.letters.myapplication.R;
  */
 
 public class MyCustomDialogFragment extends DialogFragment {
-
+//https://guides.codepath.com/android/using-dialogfragment
+//http://stacktips.com/tutorials/android/android-dialog-fragment-example
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

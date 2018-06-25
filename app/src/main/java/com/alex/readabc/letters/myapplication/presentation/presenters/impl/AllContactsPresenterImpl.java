@@ -87,6 +87,13 @@ public class AllContactsPresenterImpl extends AbstractPresenter implements AllCo
     }
 
     @Override
+    public void displayContacts(String search) {
+        interactor.setSearch(search);
+
+        interactor.execute();
+    }
+
+    @Override
     public void onContactsFetch(ArrayList<Contact> contacts) {
         this.contacts = contacts;
         mView.showContactsList(contacts);

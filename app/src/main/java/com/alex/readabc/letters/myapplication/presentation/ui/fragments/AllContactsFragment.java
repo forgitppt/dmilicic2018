@@ -7,12 +7,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alex.readabc.letters.myapplication.R;
 import com.alex.readabc.letters.myapplication.domain.executor.impl.ThreadExecutor;
@@ -50,6 +58,9 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
         // Required empty public constructor
     }
 
+    RecyclerView recyclerView;
+
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -71,6 +82,8 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
 
         Log.v("vvv", "onCreate Fragment");
         if (getArguments() != null) {
@@ -95,6 +108,8 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
 
     }
 
+    ContactsAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,6 +127,15 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
         });
 
         ((TextView) view.findViewById(R.id.txt1)).setText(s);
+
+
+        recyclerView = ((RecyclerView) view.findViewById(R.id.recyclerView));
+        recyclerView.setHasFixedSize(true);
+        // use a linear layout manager
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new ContactsAdapter(getActivity(), null);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }
@@ -160,7 +184,7 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
     @Override
     public void showProgress() {
         pb = ProgressDialog.show(getActivity(), "title", "msg");
-            mListener.onFragmentInteraction("A");
+        mListener.onFragmentInteraction("A");
     }
 
     @Override
@@ -187,6 +211,9 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
             s = s + contacts.get(i).getName();
         }
         ((TextView) getActivity().findViewById(R.id.txt1)).setText(s);
+
+        adapter.setItems(contacts);
+        adapter.notifyDataSetChanged();
     }
 
     AllContactsPresenter allContactsPresenter;
@@ -205,5 +232,82 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
         Log.v("vvv", "onSaveInstanceState fragment");
         outState.putString("s", s);
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.toolbar, menu);
+
+
+        MenuItem searchItem = menu.findItem(R.id.action_favorite);
+        SearchView searchView =
+                (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.v("vvv", "Done search " + query);
+                allContactsPresenter.displayContacts(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.v("vvv", " " + newText);
+                allContactsPresenter.displayContacts(newText);
+                return false;
+            }
+        });
+
+
+        // Define the listener
+        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Log.v("vvv", "onMenuItemActionCollapse");
+                // Do something when action item collapses
+                return true;  // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Do something when expanded
+                Log.v("vvv", "onMenuItemActionExpand");
+                return true;  // Return true to expand action view
+            }
+        };
+
+        // Get the MenuItem for the action item
+        MenuItem actionMenuItem = menu.findItem(R.id.action_favorite);
+
+        // Assign the listener to that action item
+        MenuItemCompat.setOnActionExpandListener(actionMenuItem, expandListener);
+
+        //return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                Toast.makeText(getActivity(), "aa 1", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.action_favorite:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Toast.makeText(getActivity(), "aa 2", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }

@@ -36,7 +36,8 @@ public class FetchContactsInteractorImpl extends AbstractInteractor implements F
     // static method to create instance of Singleton class
     public static FetchContactsInteractorImpl getInstance(Executor threadExecutor,
                                                           MainThread mainThread,
-                                                          Callback callback, ContactsRepository contactsRepository) {
+                                                          Callback callback,
+                                                          ContactsRepository contactsRepository) {
         if (singleInstance == null) {
             singleInstance = new FetchContactsInteractorImpl(threadExecutor, mainThread);
         }
@@ -63,7 +64,13 @@ public class FetchContactsInteractorImpl extends AbstractInteractor implements F
     public void run() {
         //Log.v("vvv","RUN");
         // retrieve the message
-        final ArrayList<Contact> message = mContactsRepository.getContacts();
+        final ArrayList<Contact> message;
+        if (filter != null) {
+            message = mContactsRepository.getContacts(filter);
+        } else {
+            message = mContactsRepository.getContacts();
+        }
+
 
         // check if we have failed to retrieve our message
         if (message == null) {
@@ -98,4 +105,11 @@ public class FetchContactsInteractorImpl extends AbstractInteractor implements F
     }
 
 
+    String filter;
+
+    @Override
+    public void setSearch(String filter) {
+        this.filter = filter;
+
+    }
 }

@@ -20,4 +20,6 @@ public interface ContactsRepository {
     boolean delete(Contact model);
 
     ArrayList<Contact> getContacts();
+
+    ArrayList<Contact> getContacts(String filter);
 }

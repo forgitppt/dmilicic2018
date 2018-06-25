@@ -15,5 +15,7 @@ public interface AllContactsPresenter extends BasePresenter {
 
     void displayContacts();
 
+    void displayContacts(String search);
+
     void setView(View mView);
 }

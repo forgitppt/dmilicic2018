@@ -6,9 +6,14 @@ import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.alex.readabc.letters.myapplication.R;
@@ -24,7 +29,12 @@ public class MainActivity extends AppCompatActivity implements AllContactsFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v("vvv", "onCreate activity");
+
         setContentView(R.layout.activity_main);
+
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET)
@@ -39,11 +49,7 @@ public class MainActivity extends AppCompatActivity implements AllContactsFragme
         }
 
 
-
-
-
         //newFragment.show(getFragmentManager(), "dialog");
-
 
 
         // Check that the activity is using the layout version with
@@ -142,9 +148,12 @@ public class MainActivity extends AppCompatActivity implements AllContactsFragme
 //                R.string.app_name);
 //        newFragment.show(getSupportFragmentManager(),"a");
 
-        MyCustomDialogFragment newFragment = new MyCustomDialogFragment();
-        newFragment.show(getSupportFragmentManager(),"a");
+//        MyCustomDialogFragment newFragment = new MyCustomDialogFragment();
+//        newFragment.show(getSupportFragmentManager(), "a");
 
 
     }
+
+
+
 }

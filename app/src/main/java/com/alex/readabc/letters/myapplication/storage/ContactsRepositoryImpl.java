@@ -18,26 +18,20 @@ import java.util.ArrayList;
 public class ContactsRepositoryImpl implements com.alex.readabc.letters.myapplication.domain.repository.ContactsRepository {
 
 
-
-
     // static variable single_instance of type Singleton
     private static ContactsRepositoryImpl singleInstance = null;
 
     // private constructor restricted to this class itself
-    private ContactsRepositoryImpl()
-    {
+    private ContactsRepositoryImpl() {
     }
 
     // static method to create instance of Singleton class
-    public static ContactsRepositoryImpl getInstance()
-    {
+    public static ContactsRepositoryImpl getInstance() {
         if (singleInstance == null)
             singleInstance = new ContactsRepositoryImpl();
 
         return singleInstance;
     }
-
-
 
 
     @Override
@@ -60,11 +54,17 @@ public class ContactsRepositoryImpl implements com.alex.readabc.letters.myapplic
         return false;
     }
 
+
+    ArrayList<Contact> contacts = null;
+
     @Override
     public ArrayList<Contact> getContacts() {
         Log.v("vvv", "getContacts tick");
 
-        ArrayList<Contact> contacts = new ArrayList<>();
+        if(contacts != null){
+            return contacts;
+        }
+        contacts = new ArrayList<>();
 
 
         try {
@@ -99,5 +99,17 @@ public class ContactsRepositoryImpl implements com.alex.readabc.letters.myapplic
 
 
         return contacts;
+    }
+
+    @Override
+    public ArrayList<Contact> getContacts(String filter) {
+        ArrayList<Contact> n = new ArrayList<>();
+        ArrayList<Contact> niza = getContacts();
+        for (int i = 0; i < niza.size(); i++) {
+            if (niza.get(i).getName().contains(filter)) {
+                n.add(niza.get(i));
+            }
+        }
+        return n;
     }
 }

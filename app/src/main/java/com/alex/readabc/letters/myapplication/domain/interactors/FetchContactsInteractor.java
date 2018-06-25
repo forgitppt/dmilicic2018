@@ -14,4 +14,5 @@ public interface FetchContactsInteractor extends Interactor {
         void onContactsFetchFailed();
     }
 
+    void setSearch(String filter);
 }
