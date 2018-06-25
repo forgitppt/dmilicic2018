@@ -2,66 +2,68 @@ package com.alex.readabc.letters.myapplication.presentation.ui.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.alex.readabc.letters.myapplication.R;
-import com.alex.readabc.letters.myapplication.domain.executor.Executor;
-import com.alex.readabc.letters.myapplication.domain.executor.impl.ThreadExecutor;
-import com.alex.readabc.letters.myapplication.domain.model.Contact;
-import com.alex.readabc.letters.myapplication.presentation.presenters.MainPresenter;
-import com.alex.readabc.letters.myapplication.presentation.presenters.impl.MainPresenterImpl;
-import com.alex.readabc.letters.myapplication.presentation.ui.BaseView;
-import com.alex.readabc.letters.myapplication.storage.ContactsContactsRepository;
-import com.alex.readabc.letters.myapplication.threading.MainThreadImpl;
+import com.alex.readabc.letters.myapplication.presentation.ui.fragments.AllContactsFragment;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity implements MainPresenter.View {
+public class MainActivity extends AppCompatActivity implements AllContactsFragment.OnFragmentInteractionListener {
 
     private static final int MY_PERMISSIONS_REQUEST = 155;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v("vvv", "onCreate activity");
         setContentView(R.layout.activity_main);
 
 
-        // create a presenter for this view
-        mainPresenter = new MainPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                this,
-                new ContactsContactsRepository()
-        );
-
-
-        Log.v("vvv", "onCreate");
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
-            Log.v("vvv", "onCreate 1");
+//            Log.v("vvv", "onCreate 1");
             askForPermission();
 
         } else {
             Toast.makeText(MainActivity.this, "Hah you already got this", Toast.LENGTH_LONG);
-            Log.v("vvv", "onCreate 2");
+//            Log.v("vvv", "onCreate 2");
         }
 
-        ((Button) findViewById(R.id.submitBtn)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //do stuff
 
-                mainPresenter.displayContacts();
+
+
+
+        // Check that the activity is using the layout version with
+        // the fragment_container FrameLayout
+        if (findViewById(R.id.fragment_container) != null) {
+
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
             }
-        });
+
+            // Create a new Fragment to be placed in the activity layout
+            AllContactsFragment firstFragment = new AllContactsFragment();
+
+
+            firstFragment.setRetainInstance(true);
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
+        }
     }
 
     private void askForPermission() {
@@ -126,33 +128,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         }
     }
 
-    @Override
-    public void showProgress() {
-
-    }
 
     @Override
-    public void hideProgress() {
+    public void onFragmentInteraction(Uri uri) {
 
-    }
-
-    @Override
-    public void showError(String message) {
-
-    }
-
-    @Override
-    public void showContactsList(ArrayList<Contact> contacts) {
-
-    }
-
-    MainPresenter mainPresenter;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //mainPresenter.resume();
-        mainPresenter.setView(this);
     }
 }

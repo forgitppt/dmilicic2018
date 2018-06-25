@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.alex.readabc.letters.myapplication.HttpHandler;
 import com.alex.readabc.letters.myapplication.domain.model.Contact;
-import com.alex.readabc.letters.myapplication.domain.model.SampleModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +15,30 @@ import java.util.ArrayList;
  * Created on 6/24/18.
  */
 
-public class ContactsContactsRepository implements com.alex.readabc.letters.myapplication.domain.repository.ContactsRepository {
+public class ContactsRepositoryImpl implements com.alex.readabc.letters.myapplication.domain.repository.ContactsRepository {
+
+
+
+
+    // static variable single_instance of type Singleton
+    private static ContactsRepositoryImpl singleInstance = null;
+
+    // private constructor restricted to this class itself
+    private ContactsRepositoryImpl()
+    {
+    }
+
+    // static method to create instance of Singleton class
+    public static ContactsRepositoryImpl getInstance()
+    {
+        if (singleInstance == null)
+            singleInstance = new ContactsRepositoryImpl();
+
+        return singleInstance;
+    }
+
+
+
 
     @Override
     public boolean insert(Contact model) {
@@ -40,17 +62,17 @@ public class ContactsContactsRepository implements com.alex.readabc.letters.myap
 
     @Override
     public ArrayList<Contact> getContacts() {
-        Log.v("vvv", "getContacts");
+        Log.v("vvv", "getContacts tick");
 
         ArrayList<Contact> contacts = new ArrayList<>();
 
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        Log.v("vvv", "getContacts serviceCall");
         HttpHandler h = new HttpHandler();
 
         //https://api.androidhive.info/contacts/

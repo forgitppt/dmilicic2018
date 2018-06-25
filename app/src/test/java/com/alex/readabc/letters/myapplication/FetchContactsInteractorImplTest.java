@@ -5,15 +5,13 @@ import com.alex.readabc.letters.myapplication.domain.executor.MainThread;
 import com.alex.readabc.letters.myapplication.domain.interactors.FetchContactsInteractor;
 import com.alex.readabc.letters.myapplication.domain.interactors.impl.FetchContactsInteractorImpl;
 import com.alex.readabc.letters.myapplication.domain.model.Contact;
-import com.alex.readabc.letters.myapplication.storage.ContactsContactsRepository;
+import com.alex.readabc.letters.myapplication.storage.ContactsRepositoryImpl;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 
@@ -29,7 +27,7 @@ public class FetchContactsInteractorImplTest {
     @Mock
     private Executor mExecutor;
     @Mock
-    private ContactsContactsRepository mMessageRepository;
+    private ContactsRepositoryImpl mMessageRepository;
     @Mock
     private FetchContactsInteractor.Callback mMockedCallback;
 

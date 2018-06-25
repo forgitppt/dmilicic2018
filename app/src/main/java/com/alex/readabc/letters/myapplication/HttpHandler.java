@@ -24,6 +24,7 @@ public class HttpHandler {
     }
 
     public String makeServiceCall(String reqUrl) {
+        Log.v("VVV","============> Rq");
         String response = null;
         try {
             URL url = new URL(reqUrl);
