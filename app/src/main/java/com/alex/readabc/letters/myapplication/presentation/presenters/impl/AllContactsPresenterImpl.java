@@ -26,6 +26,7 @@ public class AllContactsPresenterImpl extends AbstractPresenter implements AllCo
     }
 
     ContactsRepositoryImpl repository;
+    FetchContactsInteractor interactor;
 
     public AllContactsPresenterImpl(Executor executor,
                                     MainThread mainThread,
@@ -33,6 +34,13 @@ public class AllContactsPresenterImpl extends AbstractPresenter implements AllCo
         super(executor, mainThread);
         mView = view;
         this.repository = repository;
+
+        interactor = FetchContactsInteractorImpl.getInstance(
+                mExecutor,
+                mMainThread,
+                this,
+                repository
+        );
     }
 
     @Override
@@ -65,12 +73,14 @@ public class AllContactsPresenterImpl extends AbstractPresenter implements AllCo
         mView.showProgress();
 
         // initialize the interactor
-        FetchContactsInteractor interactor = new FetchContactsInteractorImpl(
-                mExecutor,
-                mMainThread,
-                this,
-                repository
-        );
+//        FetchContactsInteractor interactor = new FetchContactsInteractorImpl(
+//                mExecutor,
+//                mMainThread,
+//                this,
+//                repository
+//        );
+
+
 
         // run the interactor
         interactor.execute();
@@ -80,6 +90,7 @@ public class AllContactsPresenterImpl extends AbstractPresenter implements AllCo
     public void onContactsFetch(ArrayList<Contact> contacts) {
         this.contacts = contacts;
         mView.showContactsList(contacts);
+        mView.hideProgress();
     }
 
     @Override

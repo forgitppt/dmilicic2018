@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import com.alex.readabc.letters.myapplication.R;
 import com.alex.readabc.letters.myapplication.presentation.ui.fragments.AllContactsFragment;
+import com.alex.readabc.letters.myapplication.presentation.ui.fragments.MyAlertDialogFragment;
+import com.alex.readabc.letters.myapplication.presentation.ui.fragments.MyCustomDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements AllContactsFragment.OnFragmentInteractionListener {
 
@@ -39,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements AllContactsFragme
 
 
 
+        //newFragment.show(getFragmentManager(), "dialog");
+
+
+
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
         if (findViewById(R.id.fragment_container) != null) {
@@ -54,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements AllContactsFragme
             AllContactsFragment firstFragment = new AllContactsFragment();
 
 
-            firstFragment.setRetainInstance(true);
+            //firstFragment.setRetainInstance(true);
 
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
@@ -130,7 +137,14 @@ public class MainActivity extends AppCompatActivity implements AllContactsFragme
 
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(String uri) {
+//        DialogFragment newFragment = MyAlertDialogFragment.newInstance(
+//                R.string.app_name);
+//        newFragment.show(getSupportFragmentManager(),"a");
+
+        MyCustomDialogFragment newFragment = new MyCustomDialogFragment();
+        newFragment.show(getSupportFragmentManager(),"a");
+
 
     }
 }

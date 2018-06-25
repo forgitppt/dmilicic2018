@@ -9,6 +9,7 @@ import com.alex.readabc.letters.myapplication.domain.interactors.FetchContactsIn
 import com.alex.readabc.letters.myapplication.domain.interactors.base.AbstractInteractor;
 import com.alex.readabc.letters.myapplication.domain.model.Contact;
 import com.alex.readabc.letters.myapplication.domain.repository.ContactsRepository;
+import com.alex.readabc.letters.myapplication.storage.ContactsRepositoryImpl;
 
 import java.util.ArrayList;
 
@@ -18,16 +19,45 @@ import java.util.ArrayList;
  */
 public class FetchContactsInteractorImpl extends AbstractInteractor implements FetchContactsInteractor {
 
+
+    // static variable single_instance of type Singleton
+    private static FetchContactsInteractorImpl singleInstance = null;
+
+    // private constructor restricted to this class itself
+    private FetchContactsInteractorImpl() {
+        super(null, null);
+    }
+
+    private FetchContactsInteractorImpl(Executor threadExecutor,
+                                        MainThread mainThread) {
+        super(threadExecutor, mainThread);
+    }
+
+    // static method to create instance of Singleton class
+    public static FetchContactsInteractorImpl getInstance(Executor threadExecutor,
+                                                          MainThread mainThread,
+                                                          Callback callback, ContactsRepository contactsRepository) {
+        if (singleInstance == null) {
+            singleInstance = new FetchContactsInteractorImpl(threadExecutor, mainThread);
+        }
+
+        singleInstance.mContactsRepository = contactsRepository;
+        singleInstance.mCallback = callback;
+
+        return singleInstance;
+    }
+
+
     private Callback mCallback;
     private ContactsRepository mContactsRepository;
 
-    public FetchContactsInteractorImpl(Executor threadExecutor,
-                                       MainThread mainThread,
-                                       Callback callback, ContactsRepository contactsRepository) {
-        super(threadExecutor, mainThread);
-        mCallback = callback;
-        mContactsRepository = contactsRepository;
-    }
+//    public FetchContactsInteractorImpl(Executor threadExecutor,
+//                                       MainThread mainThread,
+//                                       Callback callback, ContactsRepository contactsRepository) {
+//        super(threadExecutor, mainThread);
+//        mCallback = callback;
+//        mContactsRepository = contactsRepository;
+//    }
 
     @Override
     public void run() {

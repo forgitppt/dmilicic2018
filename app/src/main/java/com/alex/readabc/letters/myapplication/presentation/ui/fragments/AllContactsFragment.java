@@ -1,9 +1,11 @@
 package com.alex.readabc.letters.myapplication.presentation.ui.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,8 @@ import com.alex.readabc.letters.myapplication.presentation.presenters.impl.AllCo
 import com.alex.readabc.letters.myapplication.storage.ContactsRepositoryImpl;
 import com.alex.readabc.letters.myapplication.threading.MainThreadImpl;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -103,7 +107,6 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
             @Override
             public void onClick(View view) {
                 //do stuff
-
                 allContactsPresenter.displayContacts();
             }
         });
@@ -116,7 +119,7 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction("a");
         }
     }
 
@@ -149,17 +152,21 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String uri);
     }
+
+    ProgressDialog pb;
 
     @Override
     public void showProgress() {
-
+        pb = ProgressDialog.show(getActivity(), "title", "msg");
+            mListener.onFragmentInteraction("A");
     }
 
     @Override
     public void hideProgress() {
-
+        if (pb != null)
+            pb.dismiss();
     }
 
     @Override
@@ -171,6 +178,10 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
 
     @Override
     public void showContactsList(ArrayList<Contact> contacts) {
+        if (getActivity() == null) {
+            Log.v("vvv", "SKIP UPDATE");
+            return;
+        }
         s = "";
         for (int i = 0; i < contacts.size(); i++) {
             s = s + contacts.get(i).getName();
