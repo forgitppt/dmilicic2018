@@ -64,7 +64,7 @@ public class FetchContactsInteractorImplTest {
         when(mMessageRepository.getContacts())
                 .thenReturn(contacts);
 
-        FetchContactsInteractorImpl interactor = new FetchContactsInteractorImpl(
+        FetchContactsInteractorImpl interactor = FetchContactsInteractorImpl.getInstance(
                 mExecutor,
                 mMainThread,
                 mMockedCallback,

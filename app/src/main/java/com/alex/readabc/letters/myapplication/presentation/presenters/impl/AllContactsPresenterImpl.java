@@ -81,13 +81,14 @@ public class AllContactsPresenterImpl extends AbstractPresenter implements AllCo
 //        );
 
 
-
+        interactor.setSearch(null);
         // run the interactor
         interactor.execute();
     }
 
     @Override
     public void displayContacts(String search) {
+        mView.showProgress();
         interactor.setSearch(search);
 
         interactor.execute();

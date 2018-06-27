@@ -141,11 +141,11 @@ public class AllContactsFragment extends Fragment implements AllContactsPresente
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction("a");
-        }
-    }
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction("a");
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {
