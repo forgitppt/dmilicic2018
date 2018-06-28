@@ -1,0 +1,176 @@
+package com.company.codefu.y2017.round1;
+
+import java.util.ArrayList;
+
+/**
+ * Created on 5/2/18.
+ */
+public class MinDiff300 {
+//    Minimum Difference
+//
+//    You are given n k-digit integers. 
+You have to rearrange the digits in the integers so that the difference between
+//    the maximum and the minimum number is smallest. 
+
+Digits should be rearranged by the same rule in all integers
+//    and the difference is valid only if the numbers are made with the same rule.
+//
+//    You are given the number of integers n, the number of digits in each of the integers k 
+and the array of the integers.
+//    Calculate the minimum difference between the largest and the smallest integer after
+ the digits are rearranged
+//    in all integers by the same rule.
+//
+//            e.g.
+//            Given 3 numbers with length 2: "23","80","28"
+//    They can be rearranged as:
+//            "23", "80", "28", maximum difference between 80 and 23 = 57 or
+// "32", "08", "82", maximum difference between 82 and 08 = 74
+//    The solution is 57.
+//
+//    Input parameters:
+//    n - the number of the integers in the array
+//    k - the number of the digits in each of the integers
+//    numbers - the array of numbers represented as strings
+//
+//    Constraints:
+//    n and k will be between 1 and 8 inclusive
+//    numbers will have n integers in String representation each with k digits
+//
+//    Return value:
+//    int - minimum difference between the largest and smallest number after some of the rearrangements
+//    Class Name:
+//    MinimumDifference
+//
+//    Method signature:
+//    public int compute(int n, int k, String[] numbers)
+//
+//    Test Case 1:
+//    compute(1, 3, {"943"}) = 0
+//
+//    Test Case 2:
+//    compute(2, 1, {"0","1"}) = 1
+//
+//    Test Case 3:
+//    compute(2, 2, {"03","70"}) = 23
+//
+//    Test Case 4:
+//    compute(2, 2, {"18","89"}) = 17
+//
+//    Test Case 5:
+//    compute(3, 2, {"23","80","28"}) = 57
+//
+//    Test Case 6:
+//    compute(3, 3, {"123","555","540"}) = 324
+//
+//    Test Case 7:
+//    compute(3, 3, {"436","915","534"}) = 159
+//
+//    Test Case 8:
+//    compute(4, 3, {"987","146","803","495"}) = 418
+//
+//    Test Case 9:
+//    compute(3, 3, {"387","448","984"}) = 346
+//
+//    Test Case 10:
+//    compute(3, 3, {"024","136","820"}) = 112
+
+    public static void run() {
+
+        String[] niz = {"024", "136", "820"};
+        niz = new String[]{"943"};
+        niz = new String[]{"0","1"};
+        niz = new String[]{"03","70"};
+        niz = new String[]{"18","89"};
+
+        niz = new String[]{"024", "136", "820"};
+
+
+        //if (maxStands(startingStand, endingStand, 9) == 1) {
+        if (compute(3, 3, niz) == 112) {
+//        if (compute(1, 3, niz) == 0) {
+//        if (compute(2, 1, niz) == 1) {
+//        if (compute(2, 2, niz) == 23) {
+//        if (compute(2, 2, niz) == 17) {
+            System.out.println("good");
+        } else {
+            System.out.println("NOT good");
+        }
+    }
+
+    public static void perm(String[] numbers, int start, int ksirina, ArrayList<Integer> minDiffNiza) {
+        if (start >= ksirina) {
+            String s = "";
+            for (int i = 0; i < numbers.length; i++) {
+                s = s + numbers[i];
+            }
+            System.out.println(s);
+
+            int diff = findDiff(numbers);
+            minDiffNiza.add(diff);
+        } else {
+            for (int i = start; i < ksirina; i++) {
+                swap(numbers, start, i);
+                perm(numbers, start + 1, ksirina, minDiffNiza);
+                swap(numbers, start, i);
+            }
+        }
+
+    }
+
+    public static int findDiff(String[] numbers) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < numbers.length; i++) {
+            int num = Integer.parseInt(numbers[i]);
+            if (num < min) {
+                min = num;
+            }
+            if (num > max) {
+                max = num;
+            }
+        }
+        return max - min;
+    }
+
+    public static void swap(String[] numbers, int i, int j) {
+        if (j <= i)
+            return;
+        for (int k = 0; k < numbers.length; k++) {
+            String prefix = numbers[k].substring(0, i);
+            String charAtI = numbers[k].charAt(i) + "";
+            String between = between = numbers[k].substring(i + 1, j);
+            String charAtJ = numbers[k].charAt(j) + "";
+            String sufix = numbers[k].substring(j + 1, numbers[k].length());
+
+            numbers[k] = prefix + charAtJ + between + charAtI + sufix;
+        }
+
+//        String tmp = numbers[i];
+//        numbers[i] = numbers[j];
+//        numbers[j] = tmp;
+    }
+
+//    public static void swap(String[] numbers, int i, int j) {
+//        String tmp = numbers[i];
+//        numbers[i] = numbers[j];
+//        numbers[j] = tmp;
+//    }
+
+
+    public static int compute(int n, int k, String[] numbers) {
+        ArrayList<Integer> minList = new ArrayList<>();
+        perm(numbers, 0, k, minList);
+
+        int minValue = Integer.MAX_VALUE;
+        for (int i = 0; i < minList.size(); i++) {
+            if (minList.get(i) < minValue) {
+                minValue = minList.get(i);
+            }
+        }
+
+        System.out.println("Result " + minValue);
+        return minValue;
+    }
+
+}
